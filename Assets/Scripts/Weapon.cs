@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public Camera playerCamera;
+    public bool isActiveWeapon;
 
     public bool isShooting, readyToShoot;
     bool allowReset = true;
@@ -24,12 +25,31 @@ public class Weapon : MonoBehaviour
     public float bulletVelocity = 30;
     public float bulletPrefabLifeTime = 3f;
 
+    public Animator animator;
+
+
+    public float reloadTime;
+    public int magazineSize, bulletsLeft;
+    public bool isReload;
+
+
     public enum ShootingMode
     {
         Single,
         Burst,
         Auto
     }
+
+    public enum WeaponModel
+    {
+        M1911,
+        M4
+    }
+
+    public WeaponModel thisWeaponModel;
+
+    public Vector3 spawnPosition;
+    public Vector3 spawnRotation;
 
     public GameObject muzzleEffect;
 
@@ -39,29 +59,58 @@ public class Weapon : MonoBehaviour
     {
         readyToShoot = true;
         burstBulletLeft = bulletsPerBurst;
+        animator = GetComponent<Animator>();
+
+        bulletsLeft = magazineSize;
     }
 
     void Update()
     {
-        if(currentShootingMode == ShootingMode.Auto)
+        if (isActiveWeapon)
         {
-            isShooting = Input.GetKey(KeyCode.Mouse0);
-        }
-        else if(currentShootingMode == ShootingMode.Single || currentShootingMode == ShootingMode.Burst)
-        {
-            isShooting = Input.GetKeyDown(KeyCode.Mouse0);
-        }
+            GetComponent<Outline>().enabled = false;
+            if (currentShootingMode == ShootingMode.Auto)
+            {
+                isShooting = Input.GetKey(KeyCode.Mouse0);
+            }
+            else if (currentShootingMode == ShootingMode.Single || currentShootingMode == ShootingMode.Burst)
+            {
+                isShooting = Input.GetKeyDown(KeyCode.Mouse0);
+            }
 
-        if(readyToShoot && isShooting)
-        {
-            burstBulletLeft = bulletsPerBurst;
-            FireWeapon();
+            if (readyToShoot && isShooting && bulletsLeft > 0)
+            {
+                burstBulletLeft = bulletsPerBurst;
+                FireWeapon();
+            }
+            if (bulletsLeft <= 0 && isShooting)
+            {
+                SoundManager.Instance.emptySound.Play();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReload == false && WeaponManager.Instance.CheckAmmoLeft(thisWeaponModel) > 0)
+            {
+                ReLoad();
+            }
+
+            //if(readyToShoot == true && isShooting == false && isReload == false && bulletsLeft <= 0)
+            //{
+            //    ReLoad();
+            //}
+
+            //AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft / bulletsPerBurst}/{magazineSize / bulletsPerBurst}"; 
         }
+        
     }
+
 
     private void FireWeapon()
     {
+        bulletsLeft--;
+        animator.SetTrigger("Shoot");
         muzzleEffect.GetComponent<ParticleSystem>().Play();
+
+        SoundManager.Instance.PlayShootingSound(thisWeaponModel);
 
         readyToShoot = false;
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
@@ -85,6 +134,32 @@ public class Weapon : MonoBehaviour
             burstBulletLeft--;
             Invoke("FireWeapon", shootingDelay);
         }
+
+    }
+    private void ReLoad()
+    {
+        isReload = true;
+        Invoke("ReLoadCompelete", reloadTime);
+        SoundManager.Instance.PlayReLoadSound(thisWeaponModel);
+        animator.SetTrigger("Reload");
+    }
+
+    private void ReLoadCompelete()
+    {
+        int bulletNeed = magazineSize - bulletsLeft;
+        
+        if (WeaponManager.Instance.CheckAmmoLeft(thisWeaponModel) > bulletNeed)
+        {
+            bulletsLeft = magazineSize;
+            WeaponManager.Instance.DecreaseTotalAmmo(bulletNeed, thisWeaponModel);
+            
+        }
+        else
+        {
+            bulletsLeft += WeaponManager.Instance.CheckAmmoLeft(thisWeaponModel);
+            WeaponManager.Instance.DecreaseTotalAmmo(WeaponManager.Instance.CheckAmmoLeft(thisWeaponModel), thisWeaponModel);
+        }
+        isReload = false;
     }
 
     private void ResetShoot()
@@ -96,7 +171,7 @@ public class Weapon : MonoBehaviour
     private Vector3 CalculateDirectionAndSpread()
     {
         //Shooting from the middle of the screen to check where are we point
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
         Vector3 targetPoint;
         if(Physics.Raycast(ray, out hit))
