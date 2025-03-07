@@ -18,6 +18,17 @@ public class HUDManager : MonoBehaviour
     public Image activeWeaponUI;
     public Image unActiveWeaponUI;
 
+    public TextMeshProUGUI throwableUI;
+    public Image throwableImageUI;
+
+    public TextMeshProUGUI smokeUI;
+    public Image smokeImageUI;
+
+    public Sprite transparent;
+
+    public GameObject middleDot;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,6 +56,18 @@ public class HUDManager : MonoBehaviour
         {
             magazineAmmoUI.text = "";
             totalAmmoUI.text = "";
+        }
+
+        if(ThrowableManager.Instance.lethalsCount == 0)
+        {
+            throwableImageUI.sprite = transparent;
+            throwableUI.text = "";
+        }
+
+        if (ThrowableManager.Instance.smokeCount == 0)
+        {
+            smokeImageUI.sprite = transparent;
+            smokeUI.text = "";
         }
     }
 
@@ -90,5 +113,20 @@ public class HUDManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void UpdateThrowable(Throwable.ThrowableType grenade)
+    {
+        switch (grenade)
+        {
+            case Throwable.ThrowableType.Grenade:
+                throwableUI.text=$"{ThrowableManager.Instance.lethalsCount}";
+                throwableImageUI.sprite = Resources.Load<GameObject>("Smoke").GetComponent<SpriteRenderer>().sprite ;
+                break;
+            case Throwable.ThrowableType.Smoke:
+                smokeUI.text = $"{ThrowableManager.Instance.smokeCount}";
+                smokeImageUI.sprite = Resources.Load<GameObject>("Smoke").GetComponent<SpriteRenderer>().sprite;
+                break;
+        }
     }
 }
