@@ -32,8 +32,6 @@ public class WeaponManager : MonoBehaviour
     {
         activeWeaponSlot = weapons[0];
     }
-
-    // Update is called once per frame
     void Update()
     {
         foreach (GameObject weapon in weapons)

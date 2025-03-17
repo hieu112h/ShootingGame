@@ -13,10 +13,12 @@ public class ThrowableManager : MonoBehaviour
     public float forceMultiplierLimit = 2f;
     public GameObject throwableSpawn;
 
-    public int lethalsCount = 0;
-    public Throwable.ThrowableType throwableType;
+    [Header("Infor Grenade")]
+    public int grenadeCount = 0;
+    public Throwable.ThrowableType grenadeType;
     public GameObject grenadePrefab;
 
+    [Header("Infor Smoke")]
     public int smokeCount = 0;
     public Throwable.ThrowableType smokeType;
     public GameObject smokePrefab;
@@ -35,7 +37,8 @@ public class ThrowableManager : MonoBehaviour
 
     private void Start()
     {
-        throwableType = Throwable.ThrowableType.None;
+        grenadeType = Throwable.ThrowableType.None;
+        smokeType = Throwable.ThrowableType.None;
     }
     private void Update()
     {
@@ -50,7 +53,7 @@ public class ThrowableManager : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.K))
         {
-            ThrowLethal();
+            ThrowLethal(grenadeType);
             forceMultiplier = 0;
         }
 
@@ -65,36 +68,33 @@ public class ThrowableManager : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.T))
         {
-            ThrowLethal();
+            ThrowLethal(smokeType);
             forceMultiplier = 0;
         }
 
 
     }
 
-    private void ThrowLethal()
+    private void ThrowLethal(Throwable.ThrowableType type)
     {
-        GameObject lethalPrefab = GetThrowablePrefab();
+        GameObject lethalPrefab = GetThrowablePrefab(type);
         GameObject throwable =  Instantiate(lethalPrefab, throwableSpawn.transform.position, Camera.main.transform.rotation);
         Rigidbody rb = throwable.GetComponent<Rigidbody>();
         rb.AddForce(Camera.main.transform.forward * (throwForce * forceMultiplier), ForceMode.Impulse);
 
         throwable.GetComponent<Throwable>().hasBeenThrown = true;
-        CaculateThrowable();
-        //if(lethalsCount == 0)
-        //{
-        //    throwableType = Throwable.ThrowableType.None;
-        //}
+        CaculateThrowable(type);
+
         HUDManager.Instance.UpdateThrowable(throwable.GetComponent<Throwable>().type);
 
     }
 
-    private void CaculateThrowable()
+    private void CaculateThrowable(Throwable.ThrowableType type)
     {
-        switch (throwableType)
+        switch (type)
         {
             case Throwable.ThrowableType.Grenade:
-                lethalsCount--;
+                grenadeType--;
                 break;
             case Throwable.ThrowableType.Smoke:
                 smokeCount--;
@@ -102,9 +102,9 @@ public class ThrowableManager : MonoBehaviour
         }
     }
 
-    private GameObject GetThrowablePrefab()
+    private GameObject GetThrowablePrefab(Throwable.ThrowableType type)
     {
-        switch (throwableType)
+        switch (type)
         {
             case Throwable.ThrowableType.Grenade:
                 return grenadePrefab;
@@ -133,19 +133,19 @@ public class ThrowableManager : MonoBehaviour
         switch (lethal)
         {
             case Throwable.ThrowableType.Grenade:
-                if (throwableType == lethal || throwableType == Throwable.ThrowableType.None)
+                if (grenadeType == lethal || grenadeType == Throwable.ThrowableType.None)
                 {
-                    throwableType = lethal;
-                    if (lethalsCount < 2)
+                    grenadeType = lethal;
+                    if (grenadeCount < 2)
                     {
-                        lethalsCount++;
+                        grenadeCount++;
                     }
                 }
                 break;
             case Throwable.ThrowableType.Smoke:
-                if (throwableType == lethal || throwableType == Throwable.ThrowableType.None)
+                if (smokeType == lethal || smokeType == Throwable.ThrowableType.None)
                 {
-                    throwableType = lethal;
+                    smokeType = lethal;
                     if (smokeCount < 2)
                     {
                         smokeCount++;

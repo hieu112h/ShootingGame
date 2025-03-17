@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Throwable : MonoBehaviour
 {
+
+    [Header("Infor Throwable")]
     public float delay = 3.0f;
     public float damageRadius = 20f;
     public float explosionForce = 1200f;

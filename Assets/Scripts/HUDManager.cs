@@ -18,14 +18,16 @@ public class HUDManager : MonoBehaviour
     public Image activeWeaponUI;
     public Image unActiveWeaponUI;
 
-    public TextMeshProUGUI throwableUI;
-    public Image throwableImageUI;
+    [Header("Grenade")]
+    public TextMeshProUGUI grenadeUI;
+    public Image grenadeImageUI;
 
+    [Header("Smoke")]
     public TextMeshProUGUI smokeUI;
     public Image smokeImageUI;
 
-    public Sprite transparent;
 
+    public Sprite transparent;
     public GameObject middleDot;
 
 
@@ -58,10 +60,10 @@ public class HUDManager : MonoBehaviour
             totalAmmoUI.text = "";
         }
 
-        if(ThrowableManager.Instance.lethalsCount == 0)
+        if(ThrowableManager.Instance.grenadeCount == 0)
         {
-            throwableImageUI.sprite = transparent;
-            throwableUI.text = "";
+            grenadeImageUI.sprite = transparent;
+            grenadeUI.text = "";
         }
 
         if (ThrowableManager.Instance.smokeCount == 0)
@@ -120,8 +122,8 @@ public class HUDManager : MonoBehaviour
         switch (grenade)
         {
             case Throwable.ThrowableType.Grenade:
-                throwableUI.text=$"{ThrowableManager.Instance.lethalsCount}";
-                throwableImageUI.sprite = Resources.Load<GameObject>("Smoke").GetComponent<SpriteRenderer>().sprite ;
+                grenadeUI.text=$"{ThrowableManager.Instance.grenadeCount}";
+                grenadeImageUI.sprite = Resources.Load<GameObject>("Smoke").GetComponent<SpriteRenderer>().sprite ;
                 break;
             case Throwable.ThrowableType.Smoke:
                 smokeUI.text = $"{ThrowableManager.Instance.smokeCount}";

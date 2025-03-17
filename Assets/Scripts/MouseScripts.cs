@@ -16,8 +16,7 @@ public class MouseScripts : MonoBehaviour
 
     void Start()
     {
-        //looking the cursor to the middle of the screen and making it invisible
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked; //looking the cursor to the middle of the screen and making it invisible
     }
 
     void Update()
@@ -27,21 +26,15 @@ public class MouseScripts : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         //rotation around the x axis (look up and down)
-
-
         xRotation -= mouseY;
 
-
         //clamp the rotation
-
         xRotation = Mathf.Clamp(xRotation, topClamp, bottomClamp);
         
         //rotation around the y axis (look left and right)
-
         yRotation += mouseX;
 
         //Apply rotation to our tranform
-
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
     }
 }
