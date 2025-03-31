@@ -19,6 +19,8 @@ public class Weapon : MonoBehaviour
 
     //Spread
     public float spreadIntensity;
+    public float hipSpreadIntensity;
+    public float adsSpreadIntensity;
 
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
@@ -31,6 +33,8 @@ public class Weapon : MonoBehaviour
     public float reloadTime;
     public int magazineSize, bulletsLeft;
     public bool isReload;
+
+    public bool isADS;
 
 
     public enum ShootingMode
@@ -60,14 +64,24 @@ public class Weapon : MonoBehaviour
         readyToShoot = true;
         burstBulletLeft = bulletsPerBurst;
         animator = GetComponent<Animator>();
-
         bulletsLeft = magazineSize;
+        spreadIntensity = hipSpreadIntensity;
     }
 
     void Update()
     {
         if (isActiveWeapon)
         {
+            if (Input.GetMouseButtonDown(1))
+            {
+                EnterADS();
+            }
+            
+            if(Input.GetMouseButtonUp(1))
+            {
+                ExitsADS();
+            }
+
             GetComponent<Outline>().enabled = false;
             if (currentShootingMode == ShootingMode.Auto)
             {
@@ -103,11 +117,34 @@ public class Weapon : MonoBehaviour
         
     }
 
+    private void ExitsADS()
+    {
+        animator.SetTrigger("exitsADS");
+        isADS = false;
+        HUDManager.Instance.middleDot.SetActive(true);
+        spreadIntensity = hipSpreadIntensity;
+    }
+
+    private void EnterADS()
+    {
+        animator.SetTrigger("enterADS");
+        isADS = true;
+        HUDManager.Instance.middleDot.SetActive(false);
+        spreadIntensity = adsSpreadIntensity;
+    }
 
     private void FireWeapon()
     {
         bulletsLeft--;
-        animator.SetTrigger("Shoot");
+        if (isADS)
+        {
+            animator.SetTrigger("isADSshoot");
+        }
+        else
+        {
+            animator.SetTrigger("Shoot");
+        }
+
         muzzleEffect.GetComponent<ParticleSystem>().Play();
 
         SoundManager.Instance.PlayShootingSound(thisWeaponModel);
@@ -184,10 +221,10 @@ public class Weapon : MonoBehaviour
         }
         Vector3 direction = targetPoint - bulletSpawn.position;
 
-        float x = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
+        float z = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
         float y = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
 
-        return direction + new Vector3(x, y, 0); 
+        return direction + new Vector3(0, y, z); 
     }
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float bulletPrefabLifeTime)

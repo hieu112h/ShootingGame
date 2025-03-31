@@ -20,6 +20,8 @@ public class InteractionManager : MonoBehaviour
     public Weapon weaponSelect;
 
     public AmmoBox ammoBoxSelect;
+
+    public Throwable throwableSelect;
     
     private void Update()
     {
@@ -68,6 +70,28 @@ public class InteractionManager : MonoBehaviour
                 if (ammoBoxSelect)
                 {
                     ammoBoxSelect.GetComponent<Outline>().enabled = false;
+                }
+            }
+
+
+            //Throwable
+            if (objectHitByRayCast.GetComponent<Throwable>())
+            {
+                throwableSelect = objectHitByRayCast.GetComponent<Throwable>();
+                throwableSelect.GetComponent<Outline>().enabled = true;
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    ThrowableManager.Instance.PickUpThrowable(throwableSelect);
+                    Destroy(throwableSelect.gameObject);
+                }
+
+            }
+            else
+            {
+
+                if (throwableSelect)
+                {
+                    throwableSelect.GetComponent<Outline>().enabled = false;
                 }
             }
         }

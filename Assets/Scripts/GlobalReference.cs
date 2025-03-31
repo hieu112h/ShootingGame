@@ -7,6 +7,8 @@ public class GlobalReference : MonoBehaviour
     public static GlobalReference Instance { get; set; }
 
     public GameObject bulletImpactEffectPrefab;
+    public GameObject grenadeExplosionEffect;
+    public GameObject smokeEffect;
 
     private void Awake()
     {

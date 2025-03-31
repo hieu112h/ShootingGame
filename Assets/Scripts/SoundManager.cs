@@ -7,8 +7,11 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get; set; }
 
     public AudioSource shootingSoundChanel;
+    public AudioSource throwableSoundChanel;
     public AudioClip shootingSoundM4;
     public AudioClip shootingSoundM1911;
+
+    public AudioClip grenadeSound;
 
     public AudioSource reloadSoundM4;
     public AudioSource reloadSoundM1911;
@@ -48,6 +51,16 @@ public class SoundManager : MonoBehaviour
                 break;
             case Weapon.WeaponModel.M1911:
                 reloadSoundM1911.Play();
+                break;
+        }
+    }
+
+    public void PlayThrowableSound(Throwable.ThrowableType type)
+    {
+        switch (type)
+        {
+            case Throwable.ThrowableType.Grenade:
+                throwableSoundChanel.PlayOneShot(grenadeSound);
                 break;
         }
     }
