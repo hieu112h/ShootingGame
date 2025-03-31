@@ -32,7 +32,7 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject objectHitByRayCast = hit.transform.gameObject;
             //Weapon
-            if (objectHitByRayCast.GetComponent<Weapon>() && objectHitByRayCast.GetComponent<Weapon>().isActiveWeapon == false)
+            if (objectHitByRayCast.GetComponent<Weapon>() && objectHitByRayCast.GetComponent<Weapon>().isActiveWeapon == false && hit.distance < 4)
             {
                 weaponSelect = objectHitByRayCast.GetComponent<Weapon>();
                 weaponSelect.GetComponent<Outline>().enabled = true;
@@ -41,6 +41,11 @@ public class InteractionManager : MonoBehaviour
                     WeaponManager.Instance.PickUpWeapon(objectHitByRayCast.gameObject);
                     HUDManager.Instance.GetAmmoSprite(weaponSelect.GetComponent<Weapon>().thisWeaponModel);
                     HUDManager.Instance.GetWeaponSprite(weaponSelect.GetComponent<Weapon>().thisWeaponModel);
+                    //if (HUDManager.Instance.GetUnActiveWeponSlot().transform.GetChild(0) != null)
+                    //{
+                    //    HUDManager.Instance.GetUnActiveWeaponSprite(HUDManager.Instance.GetUnActiveWeponSlot().transform.GetChild(0).gameObject.GetComponent<Weapon>().thisWeaponModel);
+                    //}
+
                 }
             
             }
@@ -54,8 +59,9 @@ public class InteractionManager : MonoBehaviour
             }
 
             //AmmoBox
-            if (objectHitByRayCast.GetComponent<AmmoBox>())
+            if (objectHitByRayCast.GetComponent<AmmoBox>() && hit.distance < 4)
             {
+               
                 ammoBoxSelect = objectHitByRayCast.GetComponent<AmmoBox>();
                 ammoBoxSelect.GetComponent<Outline>().enabled = true;
                 if (Input.GetKeyDown(KeyCode.F))
@@ -75,7 +81,7 @@ public class InteractionManager : MonoBehaviour
             }
 
             //Throwable
-            if (objectHitByRayCast.GetComponent<Throwable>())
+            if (objectHitByRayCast.GetComponent<Throwable>() && hit.distance < 4)
             {
                 throwableSelect = objectHitByRayCast.GetComponent<Throwable>();
                 throwableSelect.GetComponent<Outline>().enabled = true;

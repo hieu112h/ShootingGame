@@ -22,6 +22,20 @@ public class SoundManager : MonoBehaviour
     [Header("Sound Empty Magazine")]
     public AudioSource emptySound;
 
+
+    public AudioClip zombieWalking;
+    public AudioClip zombieChase;
+    public AudioClip zombieAttack;
+    public AudioClip zombieDeath;
+    public AudioClip zombieHurt;
+
+    public AudioSource zombieChanel;
+    public AudioSource zombieChanel2;
+
+    public AudioClip playerPain;
+    public AudioClip playerDeath;
+    public AudioSource playerChanel;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

@@ -42,7 +42,7 @@ public class ThrowableManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKey(KeyCode.K))
+        if (Input.GetKey(KeyCode.K) && grenadeCount>0)
         {
             forceMultiplier += Time.deltaTime;
             if(forceMultiplier > forceMultiplierLimit)
@@ -57,7 +57,7 @@ public class ThrowableManager : MonoBehaviour
             forceMultiplier = 0;
         }
 
-        if (Input.GetKey(KeyCode.T))
+        if (Input.GetKey(KeyCode.T) && smokeCount>0)
         {
             forceMultiplier += Time.deltaTime;
             if (forceMultiplier > forceMultiplierLimit)
@@ -94,7 +94,7 @@ public class ThrowableManager : MonoBehaviour
         switch (type)
         {
             case Throwable.ThrowableType.Grenade:
-                grenadeType--;
+                grenadeCount--;
                 break;
             case Throwable.ThrowableType.Smoke:
                 smokeCount--;

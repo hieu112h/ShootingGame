@@ -26,10 +26,13 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI smokeUI;
     public Image smokeImageUI;
 
+    [Header("Health")]
+    public TextMeshProUGUI health;
+
 
     public Sprite transparent;
     public GameObject middleDot;
-
+    public GameObject gameOver;
 
     private void Awake()
     {
@@ -85,7 +88,7 @@ public class HUDManager : MonoBehaviour
                 ammoTypeUI.sprite = Resources.Load<GameObject>("M4_Ammo").GetComponent<SpriteRenderer>().sprite;
                 return activeWeaponUI.sprite;
             default:
-                return null;
+                return ammoTypeUI.sprite = transparent;
         }
         
     }
@@ -105,7 +108,7 @@ public class HUDManager : MonoBehaviour
         }
     }
 
-    private GameObject GetUnActiveWeponSlot()
+    public GameObject GetUnActiveWeponSlot()
     {
         foreach(GameObject weaponSlot in WeaponManager.Instance.weapons)
         {
@@ -117,13 +120,28 @@ public class HUDManager : MonoBehaviour
         return null;
     }
 
+    public Sprite GetUnActiveWeaponSprite(Weapon.WeaponModel model)
+    {
+        switch (model)
+        {
+            case Weapon.WeaponModel.M1911:
+                unActiveWeaponUI.sprite = Resources.Load<GameObject>("M1911").GetComponent<SpriteRenderer>().sprite;
+                return activeWeaponUI.sprite;
+            case Weapon.WeaponModel.M4:
+                unActiveWeaponUI.sprite = Resources.Load<GameObject>("M4").GetComponent<SpriteRenderer>().sprite;
+                return activeWeaponUI.sprite;
+            default:
+                return null;
+        }
+    }
+
     public void UpdateThrowable(Throwable.ThrowableType grenade)
     {
         switch (grenade)
         {
             case Throwable.ThrowableType.Grenade:
                 grenadeUI.text=$"{ThrowableManager.Instance.grenadeCount}";
-                grenadeImageUI.sprite = Resources.Load<GameObject>("Smoke").GetComponent<SpriteRenderer>().sprite ;
+                grenadeImageUI.sprite = Resources.Load<GameObject>("Grenade").GetComponent<SpriteRenderer>().sprite ;
                 break;
             case Throwable.ThrowableType.Smoke:
                 smokeUI.text = $"{ThrowableManager.Instance.smokeCount}";

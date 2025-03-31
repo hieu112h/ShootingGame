@@ -8,7 +8,7 @@ public class PlayerMoveScripts : MonoBehaviour
 
     [Header("Infor Player")]
     public float speed = 12f;
-    public float gravity = -9.18f * 2;
+    public float gravity = -9.18f;
     public float jumpHeight = 10f;
 
     public Transform groundCheck;
@@ -31,11 +31,6 @@ public class PlayerMoveScripts : MonoBehaviour
     {
         //ground check
         isGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        //Reset the default velocity
-        if(isGround && velocity.y<0)
-        {
-            velocity.y = -2f; 
-        }
 
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
