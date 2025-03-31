@@ -94,13 +94,24 @@ public class WeaponManager : MonoBehaviour
         {
             var weapon = activeWeaponSlot.transform.GetChild(0).gameObject;
             weapon.GetComponent<Weapon>().isActiveWeapon = false;
+            HUDManager.Instance.GetUnActiveWeaponSprite(weapon.GetComponent<Weapon>().thisWeaponModel);
         }
+
+
         activeWeaponSlot = weapons[slotNumber];
         if (activeWeaponSlot.transform.childCount > 0)
         {
             var weapon = activeWeaponSlot.transform.GetChild(0).gameObject;
             weapon.GetComponent<Weapon>().isActiveWeapon = true;
+            HUDManager.Instance.GetWeaponSprite(weapon.GetComponent<Weapon>().thisWeaponModel);
+            HUDManager.Instance.GetAmmoSprite(weapon.GetComponent<Weapon>().thisWeaponModel);
         }
+        else
+        {
+            HUDManager.Instance.activeWeaponUI.sprite = HUDManager.Instance.transparent;
+            HUDManager.Instance.ammoTypeUI.sprite = HUDManager.Instance.transparent;
+        }
+        
     }
 
     internal void PickUpAmmoBox(AmmoBox ammoBox)

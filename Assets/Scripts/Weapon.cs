@@ -122,7 +122,7 @@ public class Weapon : MonoBehaviour
     {
         animator.SetTrigger("exitsADS");
         isADS = false;
-        HUDManager.Instance.middleDot.SetActive(true);
+        //HUDManager.Instance.middleDot.SetActive(true);
         spreadIntensity = hipSpreadIntensity;
     }
 
@@ -130,7 +130,7 @@ public class Weapon : MonoBehaviour
     {
         animator.SetTrigger("enterADS");
         isADS = true;
-        HUDManager.Instance.middleDot.SetActive(false);
+        //HUDManager.Instance.middleDot.SetActive(false);
         spreadIntensity = adsSpreadIntensity;
     }
 
@@ -167,7 +167,7 @@ public class Weapon : MonoBehaviour
         if (allowReset)
         {
             Invoke("ResetShoot", shootingDelay);
-            allowReset = false;
+            //allowReset = false;
         }
 
         if(currentShootingMode == ShootingMode.Burst && burstBulletLeft > 1)
