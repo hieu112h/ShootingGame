@@ -6,6 +6,7 @@ public class PlayerMoveScripts : MonoBehaviour
 {
     public CharacterController characterController;
 
+    [Header("Infor Player")]
     public float speed = 12f;
     public float gravity = -9.18f * 2;
     public float jumpHeight = 10f;

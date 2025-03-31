@@ -5,6 +5,13 @@ using UnityEngine;
 public class InteractionManager : MonoBehaviour
 {
     public static InteractionManager Instance { get; set; }
+
+    public Weapon weaponSelect;
+
+    public AmmoBox ammoBoxSelect;
+
+    public Throwable throwableSelect;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -16,12 +23,6 @@ public class InteractionManager : MonoBehaviour
             Instance = this;
         }
     }
-
-    public Weapon weaponSelect;
-
-    public AmmoBox ammoBoxSelect;
-
-    public Throwable throwableSelect;
     
     private void Update()
     {
@@ -30,7 +31,7 @@ public class InteractionManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             GameObject objectHitByRayCast = hit.transform.gameObject;
-
+            //Weapon
             if (objectHitByRayCast.GetComponent<Weapon>() && objectHitByRayCast.GetComponent<Weapon>().isActiveWeapon == false)
             {
                 weaponSelect = objectHitByRayCast.GetComponent<Weapon>();
@@ -72,7 +73,6 @@ public class InteractionManager : MonoBehaviour
                     ammoBoxSelect.GetComponent<Outline>().enabled = false;
                 }
             }
-
 
             //Throwable
             if (objectHitByRayCast.GetComponent<Throwable>())

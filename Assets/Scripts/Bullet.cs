@@ -5,12 +5,20 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [Header("Infor Bullet")]
+    public int damage;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Target"))
         {
             print("hit");
             CreatBulletImpactEffect(collision);
+            Destroy(gameObject);
+        }
+        
+        if (collision.gameObject.CompareTag("Zombie"))
+        {
+            collision.gameObject.GetComponent<Zombie>().TakeDamege(damage);
             Destroy(gameObject);
         }
     }

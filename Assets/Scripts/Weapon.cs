@@ -7,33 +7,34 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    [Header("Status Weapon")]
     public bool isActiveWeapon;
-
     public bool isShooting, readyToShoot;
     bool allowReset = true;
     public float shootingDelay = 2f;
 
-    //Burst
-    public int bulletsPerBurst = 3;
+    [Header("Brust Weapon")]
+    public int bulletsPerBurst;
     public int burstBulletLeft;
 
-    //Spread
+    [Header("Spread Weapon")]
     public float spreadIntensity;
     public float hipSpreadIntensity;
     public float adsSpreadIntensity;
 
+    [Header("Bullet Weapon")]
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
     public float bulletVelocity = 30;
     public float bulletPrefabLifeTime = 3f;
 
-    public Animator animator;
-
-
+    [Header("Magazine Weapon")]
     public float reloadTime;
     public int magazineSize, bulletsLeft;
     public bool isReload;
 
+    public Animator animator;
+    public int weaponDamage;
     public bool isADS;
 
 
@@ -153,6 +154,9 @@ public class Weapon : MonoBehaviour
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
 
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+
+        Bullet bulletDamage = bullet.GetComponent<Bullet>();
+        bulletDamage.damage = weaponDamage; 
 
         bullet.transform.forward = shootingDirection;
 

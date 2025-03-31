@@ -4991,6 +4991,8 @@ MonoBehaviour:
   bulletsPerBurst: 1
   burstBulletLeft: 0
   spreadIntensity: 0
+  hipSpreadIntensity: 0
+  adsSpreadIntensity: 0
   bulletPrefab: {fileID: 224277521590239066, guid: 37c2fb1f767795d44899215b7b82a9fd,
     type: 3}
   bulletSpawn: {fileID: 890403122205136798}
@@ -5001,6 +5003,8 @@ MonoBehaviour:
   magazineSize: 30
   bulletsLeft: 0
   isReload: 0
+  weaponDamage: 25
+  isADS: 0
   thisWeaponModel: 1
   spawnPosition: {x: 0, y: 0, z: 0}
   spawnRotation: {x: 0, y: 0, z: 0}

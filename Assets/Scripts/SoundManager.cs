@@ -6,15 +6,20 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; set; }
 
+    [Header("Sound Weapon")]
     public AudioSource shootingSoundChanel;
-    public AudioSource throwableSoundChanel;
     public AudioClip shootingSoundM4;
     public AudioClip shootingSoundM1911;
 
+    [Header("Sound Throwable")]
+    public AudioSource throwableSoundChanel;
     public AudioClip grenadeSound;
 
+    [Header("Sound Reload")]
     public AudioSource reloadSoundM4;
     public AudioSource reloadSoundM1911;
+
+    [Header("Sound Empty Magazine")]
     public AudioSource emptySound;
 
     private void Awake()
